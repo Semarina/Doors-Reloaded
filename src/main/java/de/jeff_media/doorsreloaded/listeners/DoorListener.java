@@ -4,7 +4,6 @@ import de.jeff_media.doorsreloaded.Main;
 import de.jeff_media.doorsreloaded.config.Config;
 import de.jeff_media.doorsreloaded.config.Permissions;
 import de.jeff_media.doorsreloaded.utils.SoundUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,44 +23,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DoorListener implements Listener {
 
-    private final HashMap<Block,Long> autoClose = new HashMap<>();
+    private final Map<Block, Long> autoClose = new ConcurrentHashMap<>();
 
     private final Main main = Main.getInstance();
-
-    {
-        Bukkit.getScheduler().runTaskTimer(main, () -> {
-            Iterator<Map.Entry<Block,Long>> it = autoClose.entrySet().iterator();
-            while(it.hasNext()) {
-                Map.Entry<Block,Long> entry = it.next();
-                Block block = entry.getKey();
-                Long time = entry.getValue();
-                if(System.currentTimeMillis() < time) continue;
-                if(block.getBlockData() instanceof Openable) {
-                    Openable openable = (Openable) block.getBlockData();
-                    if(openable.isOpen()) {
-                        if(openable instanceof Door) {
-                            Block otherDoor = main.getOtherPart((Door) openable, block);
-                            if(otherDoor != null) {
-                                main.toggleOtherDoor(block, otherDoor, false, false);
-                            } else {
-                                //System.out.println("other door is null");
-                            }
-                        }
-                        openable.setOpen(false);
-                        block.setBlockData(openable);
-                        block.getWorld().playEffect(block.getLocation(),Effect.IRON_DOOR_CLOSE, 0);
-                    }
-                }
-                it.remove();
-            }
-        },1,1);
-    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onRedstoneDoor(BlockRedstoneEvent event) {
@@ -102,7 +71,7 @@ public class DoorListener implements Listener {
         door.setOpen(!door.isOpen());
         onRightClickDoor(event);
         block.setBlockData(door);
-        autoClose.put(block,System.currentTimeMillis() + (main.getConfig().getLong("autoclose")*1000));
+        scheduleAutoClose(block);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -202,5 +171,56 @@ public class DoorListener implements Listener {
         }
 
         return;
+    }
+
+    private void scheduleAutoClose(Block block) {
+        long delaySeconds = main.getConfig().getLong(Config.AUTO_CLOSE);
+        if (delaySeconds <= 0L) {
+            autoClose.remove(block);
+            return;
+        }
+        long dueTime = System.currentTimeMillis() + (delaySeconds * 1000L);
+        autoClose.put(block, dueTime);
+        long delayTicks = Math.max(1L, delaySeconds * 20L);
+        main.getScheduler().runAtBlockLater(block, delayTicks, () -> handleAutoClose(block));
+    }
+
+    private void handleAutoClose(Block block) {
+        Long dueTime = autoClose.get(block);
+        if (dueTime == null) {
+            return;
+        }
+
+        long now = System.currentTimeMillis();
+        if (now < dueTime) {
+            long remainingMillis = dueTime - now;
+            long remainingTicks = Math.max(1L, (remainingMillis + 49L) / 50L);
+            main.getScheduler().runAtBlockLater(block, remainingTicks, () -> handleAutoClose(block));
+            return;
+        }
+
+        BlockData data = block.getBlockData();
+        if (!(data instanceof Openable)) {
+            autoClose.remove(block);
+            return;
+        }
+
+        Openable openable = (Openable) data;
+        if (!openable.isOpen()) {
+            autoClose.remove(block);
+            return;
+        }
+
+        if (openable instanceof Door) {
+            Block otherDoor = main.getOtherPart((Door) openable, block);
+            if (otherDoor != null) {
+                main.toggleOtherDoor(block, otherDoor, false, false, true);
+            }
+        }
+
+        openable.setOpen(false);
+        block.setBlockData(openable);
+        block.getWorld().playEffect(block.getLocation(), Effect.IRON_DOOR_CLOSE, 0);
+        autoClose.remove(block);
     }
 }

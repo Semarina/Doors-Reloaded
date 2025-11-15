@@ -25,6 +25,9 @@ check-for-redstone: true
 # They need the permission "doorsreloaded.irondoors".
 allow-opening-irondoors-with-hands: false
 
+# Automatically closes iron doors and trapdoors after the given amount of seconds (0 to disable).
+autoclose: 0
+
 ###########################
 #         Knocking        #
 ###########################
@@ -46,13 +49,13 @@ knocking-requires-empty-hand: false
 knocking-requires-shift: false
 
 # Settings for the knocking sound
-# See here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+# See the modern Paper API reference for valid sound keys.
 sound-knock-iron: "minecraft:entity.zombie.attack_iron_door"
 sound-knock-wood: "minecraft:item.shield.block"
 # A volume of 1.0 means 16 blocks, 2.0 means 32 blocks, etc.
 sound-knock-volume: 1.0
 sound-knock-pitch: 1.0
-# See here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/SoundCategory.html
+# See the modern Paper API reference for valid sound categories.
 sound-knock-category: BLOCKS
 
 ###########################
