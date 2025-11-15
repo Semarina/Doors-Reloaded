@@ -20,6 +20,7 @@ public class Config {
     public static final String DEBUG = "debug";
     public static final String ALLOW_DOUBLEDOORS = "allow-doubledoors";
     public static final String ALLOW_IRONDOORS = "allow-opening-irondoors-with-hands";
+    public static final String AUTO_CLOSE = "autoclose";
 
     public static void init() {
         Main main = Main.getInstance();
@@ -36,5 +37,6 @@ public class Config {
         conf.addDefault(KNOCKING_REQUIRES_EMPTY_HAND, false);
         conf.addDefault(KNOCKING_REQUIRES_SHIFT, false);
         conf.addDefault(DEBUG, false);
+        conf.addDefault(AUTO_CLOSE, 0);
     }
 }

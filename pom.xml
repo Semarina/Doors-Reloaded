@@ -10,18 +10,17 @@
     <description>Lightweight, modern door behavior for Paper, Purpur, and Folia 1.21.x+.</description>
 
     <properties>
-        <spigot.website>https://www.spigotmc.org/resources/authors/mfnalex.175238/</spigot.website>
-        <spigot.prefix>${project.name}</spigot.prefix>
-        <spigot.main>${project.groupId}.doorsreloaded.Main</spigot.main>
+        <plugin.prefix>${project.name}</plugin.prefix>
+        <plugin.main>${project.groupId}.doorsreloaded.Main</plugin.main>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <java.version>21</java.version>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
         <config.version>${maven.build.timestamp}</config.version>
     </properties>
 
-
     <build>
+        <finalName>${project.name}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -84,35 +83,25 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
         </plugins>
 
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ftp</artifactId>
-                <version>3.5.3</version>
-            </extension>
-        </extensions>
     </build>
 
     <repositories>
-        <!-- Spigot -->
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 
     <dependencies>
-        <!-- Spigot -->
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.21.5-R0.1-SNAPSHOT</version>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 

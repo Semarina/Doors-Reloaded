@@ -11,7 +11,9 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import de.jeff_media.doorsreloaded.scheduler.FoliaPluginScheduler;
+import de.jeff_media.doorsreloaded.scheduler.PaperPluginScheduler;
+import de.jeff_media.doorsreloaded.scheduler.PluginScheduler;
 
 import java.io.IOException;
 
@@ -31,7 +33,9 @@ public class Main extends JavaPlugin {
             new PossibleNeighbour(-1,0, Door.Hinge.RIGHT, BlockFace.NORTH),
             new PossibleNeighbour(1,0, Door.Hinge.LEFT, BlockFace.NORTH)
     };
-    private boolean redstoneEnabled = false;
+    private PluginScheduler scheduler;
+    private boolean foliaEnvironment;
+    private boolean redstoneEnabled;
 
     public static Main getInstance() {
         return instance;
@@ -86,9 +90,20 @@ public class Main extends JavaPlugin {
         return redstoneEnabled;
     }
 
+    public PluginScheduler getScheduler() {
+        return scheduler;
+    }
+
+    public boolean isFoliaEnvironment() {
+        return foliaEnvironment;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
+        foliaEnvironment = detectFoliaEnvironment();
+        scheduler = foliaEnvironment ? new FoliaPluginScheduler(this) : new PaperPluginScheduler(this);
+        getLogger().info(foliaEnvironment ? "Detected Folia environment; using region-aware scheduler." : "Using Paper/Purpur scheduler.");
         Config.init();
         reload();
         Bukkit.getPluginManager().registerEvents(new DoorListener(), this);
@@ -124,17 +139,25 @@ public class Main extends JavaPlugin {
         }
 
         boolean openNow = door.isOpen();
-        new BukkitRunnable() {
-            @Override
-                public void run() {
-                if (!(otherBlock.getBlockData() instanceof Door)) return;
-                Door newDoor = (Door) block.getBlockData();
-                if (!force && newDoor.isOpen() == openNow) {
-                    return;
-                }
-                toggleDoor(otherBlock, otherDoor, open);
+        scheduler.runAtBlockLater(block, 1L, () -> {
+            if (!(otherBlock.getBlockData() instanceof Door)) return;
+            Door newDoor = (Door) block.getBlockData();
+            if (!force && newDoor.isOpen() == openNow) {
+                return;
             }
-            }.runTaskLater(this, 1L);
+            toggleDoor(otherBlock, otherDoor, open);
+        });
+
+    }
+
+    private boolean detectFoliaEnvironment() {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.scheduler.RegionScheduler");
+            Bukkit.getServer().getClass().getMethod("getRegionScheduler");
+            return true;
+        } catch (ReflectiveOperationException | SecurityException ignored) {
+            return false;
+        }
 
     }
 

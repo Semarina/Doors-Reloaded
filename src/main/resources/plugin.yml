@@ -1,14 +1,15 @@
-main: ${spigot.main}
+main: ${plugin.main}
 name: ${project.name}
 version: ${project.version}
-description: "${project.description}"
-prefix: ${spigot.prefix}
+description: "Lightweight, modern door behavior optimized for Paper, Purpur, and Folia 1.21.x+."
+prefix: ${plugin.prefix}
 api-version: "1.21"
 authors:
   - mfnalex
   - JEFF Media GbR
 database: false
 load: POSTWORLD
+folia-supported: true
 commands:
   doorsreloaded:
     description: Reloads the configuration
