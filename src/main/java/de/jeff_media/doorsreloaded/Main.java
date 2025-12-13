@@ -106,6 +106,18 @@ public class Main extends JavaPlugin {
         getLogger().info(foliaEnvironment ? "Detected Folia environment; using region-aware scheduler." : "Using Paper/Purpur scheduler.");
         Config.init();
         reload();
+
+        if (getConfig().getInt("config-version", 0) < 2) {
+            getLogger().info("Found outdated config, updating...");
+            try {
+                de.jeff_media.doorsreloaded.utils.ConfigUpdater.update(this, "config.yml", new java.io.File(getDataFolder(), "config.yml"), java.util.Collections.emptyList());
+                reloadConfig();
+                getLogger().info("Config updated successfully.");
+            } catch (Exception e) {
+                getLogger().warning("Could not update config.yml: " + e.getMessage());
+            }
+        }
+
         Bukkit.getPluginManager().registerEvents(new DoorListener(), this);
         getCommand("doorsreloaded").setExecutor(new ReloadCommand());
     }

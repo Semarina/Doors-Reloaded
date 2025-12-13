@@ -2,6 +2,8 @@
 #       DoorsReloaded     #
 ###########################
 
+config-version: 2
+
 # Written by mfnalex / JEFF Media GbR
 # Community continuation of DoorsReloaded is maintained by Semarina organization.
 
@@ -51,6 +53,7 @@ knocking-requires-shift: false
 # Settings for the knocking sound
 # See here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
 sound-knock-iron: "minecraft:entity.zombie.attack_iron_door"
+sound-knock-copper: "minecraft:entity.zombie.attack_iron_door"
 sound-knock-wood: "minecraft:item.shield.block"
 # A volume of 1.0 means 16 blocks, 2.0 means 32 blocks, etc.
 sound-knock-volume: 1.0

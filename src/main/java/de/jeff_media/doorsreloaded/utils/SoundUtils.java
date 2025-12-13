@@ -13,9 +13,12 @@ public class SoundUtils {
         Location location = block.getLocation();
         World world = block.getWorld();
         String soundID;
-        if (block.getType().equals(Material.IRON_DOOR)) {
+        if (block.getType() == Material.IRON_DOOR || block.getType() == Material.IRON_TRAPDOOR) {
             soundID = main.getConfig().getString(Config.SOUND_KNOCK_IRON);
             if (soundID == null || soundID.isEmpty()) soundID = "minecraft:item.shield.block";
+        } else if (block.getType().name().contains("COPPER_DOOR") || block.getType().name().contains("COPPER_TRAPDOOR")) {
+            soundID = main.getConfig().getString(Config.SOUND_KNOCK_COPPER);
+            if (soundID == null || soundID.isEmpty()) soundID = "minecraft:entity.zombie.attack_iron_door";
         } else {
             soundID = main.getConfig().getString(Config.SOUND_KNOCK_WOOD);
             if (soundID == null || soundID.isEmpty()) soundID = "minecraft:entity.zombie.attack_iron_door";
