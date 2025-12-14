@@ -1,87 +1,77 @@
-##############################
-## Java
-##############################
-.mtj.tmp/
-*.class
-**/*.jar
-!**/libs/*.jar
-*.war
-*.ear
-*.nar
-hs_err_pid*
-replay_pid*
+# DoorsReloaded .gitignore
 
 ##############################
-## Maven
+## Build outputs
 ##############################
+build/
 target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-pom.xml.bak
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
+out/
+bin/
+dist/
 
 ##############################
 ## Gradle
 ##############################
-bin/
-build/
-.gradle
-.gradletasknamecache
-gradle-app.setting
-!gradle-wrapper.jar
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
 
 ##############################
-## IntelliJ
+## IDE - IntelliJ IDEA
 ##############################
-out/
 .idea/
-.idea_modules/
 *.iml
 *.ipr
 *.iws
 
 ##############################
-## Eclipse
+## IDE - Eclipse
 ##############################
 .settings/
-bin/
-tmp/
-.metadata
 .classpath
 .project
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.loadpath
 .factorypath
 
 ##############################
-## NetBeans
+## IDE - VS Code
+##############################
+.vscode/
+
+##############################
+## IDE - NetBeans
 ##############################
 nbproject/private/
-build/
 nbbuild/
-dist/
 nbdist/
-nbactions.xml
 nb-configuration.xml
 
 ##############################
-## Visual Studio Code
+## Java
 ##############################
-.vscode/
-.code-workspace
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+hs_err_pid*
+replay_pid*
 
 ##############################
-## OS X
+## Fabric Loom
+##############################
+run/
+**/loom-cache/
+remappedMods/
+
+##############################
+## OS generated files
 ##############################
 .DS_Store
-/run/
+Thumbs.db
+*.swp
+*.bak
+*.tmp
+*~
+
+##############################
+## Logs
+##############################
+*.log
+logs/

@@ -120,6 +120,9 @@ public class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new DoorListener(), this);
         getCommand("doorsreloaded").setExecutor(new ReloadCommand());
+
+        // Check for updates on Modrinth
+        de.jeff_media.doorsreloaded.utils.UpdateChecker.checkForUpdates();
     }
 
     public void reload() {

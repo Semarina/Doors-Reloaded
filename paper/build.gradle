@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+base {
+    archivesName = 'DoorsReloaded'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.papermc.io/repository/maven-public/" }
+}
+
+dependencies {
+    // Attempt to use the property, but fallback or adjust if 1.21.11 doesn't exist in repo
+    def mcVersion = project.properties['minecraft_version']
+    // Paper versioning often appends -R0.1-SNAPSHOT
+    compileOnly "io.papermc.paper:paper-api:${mcVersion}-R0.1-SNAPSHOT"
+}
+
+processResources {
+    def props = [
+        project: [
+            name: 'DoorsReloaded',
+            version: project.version
+        ],
+        plugin: [
+            main: 'de.jeff_media.doorsreloaded.Main',
+            prefix: 'DoorsReloaded'
+        ]
+    ]
+    inputs.properties props
+    filesMatching('plugin.yml') { expand props }
+}
+
+shadowJar {
+    archiveClassifier = ''
+}

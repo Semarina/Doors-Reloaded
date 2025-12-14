@@ -1,0 +1,45 @@
+plugins {
+    id 'base'
+}
+
+subprojects {
+    group = 'de.jeff_media'
+    version = properties['mod_version'] ?: '2.1.0'
+
+    repositories {
+        mavenCentral()
+    }
+    
+    // Common settings
+    tasks.withType(JavaCompile).configureEach {
+        options.release.set(21)
+        options.encoding = 'UTF-8'
+    }
+}
+
+// Build both platform jars and copy to root build/libs directory
+// Note: Paper and Fabric use different APIs and cannot be merged into a single jar
+task universalJar {
+    dependsOn ':paper:shadowJar', ':fabric:remapJar'
+    
+    doLast {
+        def libsDir = file("$buildDir/libs")
+        libsDir.mkdirs()
+        
+        def version = properties['mod_version'] ?: '2.1.0'
+        
+        // Copy Paper jar
+        def paperJar = project(':paper').tasks.shadowJar.archiveFile.get().asFile
+        def paperDest = new File(libsDir, "DoorsReloaded-${version}-Paper.jar")
+        paperDest.bytes = paperJar.bytes
+        println "Copied Paper jar: ${paperDest.name}"
+        
+        // Copy Fabric jar
+        def fabricJar = project(':fabric').tasks.remapJar.archiveFile.get().asFile
+        def fabricDest = new File(libsDir, "DoorsReloaded-${version}-Fabric.jar")
+        fabricDest.bytes = fabricJar.bytes
+        println "Copied Fabric jar: ${fabricDest.name}"
+        
+        println "Build complete! Jars available in build/libs/"
+    }
+}

@@ -1,7 +1,7 @@
 main: ${plugin.main}
 name: ${project.name}
 version: ${project.version}
-description: "Lightweight, modern door behavior optimized for Paper, Purpur, and Folia 1.21.11+."
+description: "Lightweight, modern door behavior optimized for Paper, Purpur, and Folia 1.21+"
 prefix: ${plugin.prefix}
 api-version: "1.21"
 authors:

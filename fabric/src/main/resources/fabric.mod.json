@@ -1,0 +1,31 @@
+{
+    "schemaVersion": 1,
+    "id": "doorsreloaded",
+    "version": "${version}",
+    "name": "DoorsReloaded",
+    "description": "Lightweight, modern door behavior used on Semarina.",
+    "authors": [
+        "mfnalex"
+    ],
+    "contact": {
+        "homepage": "https://jeff-media.de/plugins/doorsreloaded",
+        "sources": "https://github.com/JEFF-Media-GbR/DoorsReloaded"
+    },
+    "license": "Proprietary",
+    "icon": "assets/doorsreloaded/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "de.jeff_media.doorsreloaded.DoorsReloadedMod"
+        ]
+    },
+    "mixins": [
+        "doorsreloaded.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.15.11",
+        "fabric": "*",
+        "minecraft": "~1.21.1",
+        "java": ">=21"
+    }
+}

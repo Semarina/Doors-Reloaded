@@ -67,3 +67,6 @@ sound-knock-category: BLOCKS
 
 # Debug mode
 debug: false
+
+# Check for updates on Modrinth
+check-for-updates: true

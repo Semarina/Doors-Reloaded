@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "de.jeff_media.doorsreloaded.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "DoorBlockMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
